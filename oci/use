@@ -10,6 +10,8 @@ config_file_path="${1:-$HOME/.oci/config}"
 if [ ! -f $config_file_path ]; then
   red echo "Config file not found."
   exit 1
+else
+  shhd yellow echo "$config_file_path"
 fi
 
 # Read the config file and export variables as environment variables

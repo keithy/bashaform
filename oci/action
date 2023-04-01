@@ -21,6 +21,8 @@ instance_id=$(oci compute instance list \
   --compartment-id $TENANCY \
   --query "data[? \"display-name\" == '$instance_name' && \"lifecycle-state\" != 'TERMINATED' ].id | [0]" \
   --raw-output)
+  
+shhd yellow show instance_name instance_id
 
 # Perform action based on user input
 case $action in

@@ -4,8 +4,10 @@
 # angelbox/bashaform
 
 These scripts aim to provide the simplest possible remote management
-of infrastucture in a way that can be easily adopted
-into other projects.
+of infrastucture in a modular form that can be easily adopted
+into and combined with other projects, e.g.
+
+* angelbox/angel a command line interface integrating this and other
 
 ## Folder based configuration
 
@@ -37,8 +39,9 @@ image='Canonical-Ubuntu-22.04-Minimal-20'
 user_data='enable_root.sh'
 ```
 
-The `box.env` file is minimal; `venue` references a file form a library of 
-potential venues. Each box may have multiple venues to select from.
+The `box.env` file is minimal; `venue` references a file linked from a library
+of potential venues. A box may have several venues configured to select from. 
+Values in box, override defaults provided in the venue.
 
 ## Oracle Cloud
 
@@ -54,6 +57,8 @@ The default configuration is created in `.oci/config`, but any other environment
 ```
 ~/code/bashaform/oci/use ~/.oci/my-config
 ```
+
+NOTE: The tenancy 'subnet' will need to be renamed to the value expected, 'subnet-default' is the default used in the venue files provided. (this may be overriden on an individual basis in box.env) 
 
 ## Example - honey pot
 
@@ -99,7 +104,7 @@ Host *honey1.demo*
 
 The Ubuntu image provided does not have the root user enabled. For consistency the `enable_root.sh` user_data script is available as an optional extra to fix this. 
 
-As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/code/bashaform/*/*/*.ssh_config`), 
+As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/code/bashaform/example/*/*.ssh_config`), 
 
 ```
 $> ssh honey.demo
@@ -112,3 +117,6 @@ root@honey1:~#
 
 A simple mechanism for installing an overlay of files onto the new system is provided via, `makeself` the self-extracting archive utility.
 
+## Debug/Log levels
+
+Environment variables `QUIET, VERBOSE, DEBUG` control output

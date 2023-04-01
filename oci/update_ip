@@ -14,7 +14,9 @@ ip="${name_ip#* }"
 [[ -z "$ip" ]] && echo "IP not found" && exit
 
 echo "New IP: $ip"
-sed_script="s/Hostname [0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/Hostname ${ip}/;"
+sed_script="s/Hostname [0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/Hostname ${ip}/ ;"
+
+shhd yellow show name_ip name ip sed_script
 
 for config in *.ssh_config
 do
