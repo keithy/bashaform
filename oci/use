@@ -1,0 +1,35 @@
+#!/usr/bin/env bash -l
+
+# Source this script to use non-default oci-cli 
+# config environment for scripts.
+
+# Set the path to your config file
+config_file_path="${1:-$HOME/.oci/config}"
+
+# Check if the config file exists
+if [ ! -f $config_file_path ]; then
+  red echo "Config file not found."
+  exit 1
+fi
+
+# Read the config file and export variables as environment variables
+while read -r line; do
+
+  variable_name="${line%%=*}"
+
+  # Skip any comments or blank lines
+  if [[ "$variable_name" =~ ^[#\[] ]] || [[ -z "$variable_name" ]]; then
+    continue
+  fi
+  
+  variable_name="${variable_name^^}"
+  variable_value="${line##*=}"
+
+  if [[ "$variable_name" != "PASS_PHRASE" ]]; then
+    shhd cyan echo "${variable_name}"="$variable_value"
+  fi
+
+  export "${variable_name}"="$variable_value"
+ 
+done < "$config_file_path"
+

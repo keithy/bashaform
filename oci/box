@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -euo pipefail
+here="${BASH_SOURCE[0]%/*}"
+source "$here/../shared/functions.sh"
+
+loud green echo "# ~${PWD/$HOME/}/box.env"
+loud cyan cat "${PWD}/box.env"
+# import box,shape,image
+[[ -z ${box+x} ]] && source "${PWD}/box.env"
+
+loud green echo "# ~${PWD/$HOME/}/$venue.env"
+loud cyan cat "${PWD}/$venue.env"
+# import box,shape,image
+[[ -z ${shape+x} ]] && source "${PWD}/$venue.env"

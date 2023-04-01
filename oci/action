@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -euo pipefail
+
+here="${BASH_SOURCE[0]%/*}"
+source "$here/../shared/functions.sh"
+
+# Parse input parameters
+action="${1:-XYZ}"
+action="${action^^}" # toUppercase
+
+instance_name=${2:-$PWD}
+instance_name=${instance_name##*/}
+instance_name=${instance_name%.*}
+
+[[ -z ${TENANCY+x} ]] && source "$here/use" "" 
+
+# Get the OCID of the instance with the specified display name
+instance_id=$(oci compute instance list \
+  --compartment-id $TENANCY \
+  --query "data[? \"display-name\" == '$instance_name' && \"lifecycle-state\" != 'TERMINATED' ].id | [0]" \
+  --raw-output)
+
+# Perform action based on user input
+case $action in
+  START|STOP|SOFTSTOP|RESET|SOFTRESET|SUSPEND)
+    # Perform the specified action on the instance
+    oci compute instance action --instance-id $instance_id --action $action
+    ;;
+  STATUS)
+    printf "$instance_name "
+
+    oci compute instance list \
+      --compartment-id $TENANCY \
+      --query "data[? id=='$instance_id'].\"lifecycle-state\" | [0]" \
+      --raw-output
+    ;;
+  TERMINATE)
+    oci compute instance terminate --instance-id "$instance_id"
+    ;;
+  IP)
+    printf "$instance_name "
+    
+    oci compute instance list-vnics --instance-id "$instance_id" \
+        --query "data[0].\"public-ip\"" --raw-output
+    ;;
+  ID)
+    printf "$instance_name $instance_id\n"
+    ;;
+  NAME)
+    echo "$instance_name"
+    ;;
+  INFO)
+    oci compute instance list \
+        --compartment-id $TENANCY \
+        --query "data[? \"display-name\" == '$instance_name']"
+    ;;
+  *)
+    red echo "Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|SUSPEND|TERMINATE|STATUS|IP"
+    ;;
+esac

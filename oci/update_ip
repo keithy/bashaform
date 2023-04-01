@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -euo pipefail
+here="${BASH_SOURCE[0]%/*}"
+source "$here/../shared/functions.sh"
+
+QUIET=true source "$here/box"
+
+name_ip=$($here/action ip $@)
+name="${name_ip% *}"
+ip="${name_ip#* }"
+
+[[ -z "$ip" ]] && echo "IP not found" && exit
+
+echo "New IP: $ip"
+sed_script="s/Hostname [0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/Hostname ${ip}/;"
+
+for config in *.ssh_config
+do
+    echo "Updating: $config"
+    grep -q "$box" "$config" \
+        && sed -i "$sed_script" "$config" \
+        && cat "$config"
+done

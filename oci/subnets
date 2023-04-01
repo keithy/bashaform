@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -euo pipefail
+here="${BASH_SOURCE[0]%/*}"
+source "$here/../shared/functions.sh"
+
+[[ -z ${TENANCY+x} ]] && source ${BASH_SOURCE[0]%/*}/use "" 
+
+# import box,shape,image
+[[ -z ${box+x} ]] && source "${PWD}/box.env"
+
+# import box,shape,image
+[[ -z ${shape+x} ]] && source "${PWD}/$venue.env"
+
+oci network subnet list --compartment-id $TENANCY # --query 'data[*].{VCNID:id,VCNName:"display-name"}'
+
+if [[ -n ${subnet+x} ]]; then
+
+    printf "Current: $subnet "
+
+    oci network subnet list --compartment-id $TENANCY --all --raw-output \
+        --query "data[? \"display-name\" == '$subnet' ].id | [0]"
+
+fi

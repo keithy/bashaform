@@ -1,0 +1,5 @@
+Host *honey1.demo*
+    User root
+    Port 22
+    Hostname 141.147.110.145
+    
