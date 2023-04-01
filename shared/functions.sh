@@ -23,7 +23,7 @@ show ()
 
 read_env ()
 {   # Read a simple env file and export entries as environment variables
-    yellow echo $1
+
     local line input variable_name variable_value
     while read -r input; do
 

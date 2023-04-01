@@ -2,9 +2,10 @@
 
 # Strict Bash Mode
 set -euo pipefail
+
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-[[ -z ${TENANCY+x} ]] && source ${BASH_SOURCE[0]%/*}/use
+[[ -z ${TENANCY+x} ]] && source "$here/use"
 
 oci compute image list --compartment-id $TENANCY --all --query "data[*].\"display-name\"" 

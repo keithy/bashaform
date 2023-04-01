@@ -2,6 +2,7 @@
 
 # Strict Bash Mode
 set -euo pipefail
+
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
@@ -11,12 +12,18 @@ loud cyan cat "${PWD}/box.env"
 # import box, venue etc.
 read_env "${PWD}/box.env"
 
-loud green echo "# ~${PWD/$HOME/}/${venue}.env"
-loud cyan cat "${PWD}/${venue}.env"
+loud green echo "# ~${PWD/$HOME/}/${location}.env"
+loud cyan cat "${PWD}/${location}.env"
+
+loud green echo "# ~${PWD/$HOME/}/${type}.env"
+loud cyan cat "${PWD}/${type}.env"
+
+# import zone/subnet etc.
+read_env "${PWD}/${location}.env"
 
 # import shape,image etc.
-read_env "${PWD}/${venue}.env"
+read_env "${PWD}/${type}.env"
 
-# import box again to allow for overriding venue
+# import box again to allow for overriding values
 read_env "${PWD}/box.env"
 

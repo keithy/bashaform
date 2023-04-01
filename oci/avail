@@ -2,6 +2,7 @@
 
 # Strict Bash Mode
 set -euo pipefail
+
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 

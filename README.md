@@ -4,10 +4,10 @@
 # angelbox/bashaform
 
 These scripts aim to provide the simplest possible remote management
-of infrastucture in a modular form that can be easily adopted
-into and combined with other projects, e.g.
+of infrastucture. Their license, minimalist and modular form allows 
+them to be easily adopted into and combined with other projects. 
 
-* angelbox/angel a command line interface integrating this and other
+* angelbox/angel a command line interface integrating this and other projects
 
 ## Folder based configuration
 
@@ -21,32 +21,42 @@ $> ~/code/bashaform/oci/box
 # ~/code/bashaform/example/honey1.demo/box.env
 box='honey1.demo'
 desc='Honey Pot Server'
-venue='oci-london'
-#venue='aws-london'
 
-# ~/code/bashaform/example/honey1.demo/oci-london.env
+# Venue
+type='oci-micro-ubuntu'
+location='oci-london-1'
+#location='aws-london'
+
+# ~/code/bashaform/example/honey1.demo/oci-london-1.env
 zone='HllT:UK-LONDON-1-AD-1'
 subnet='subnet-default'
 
+# ~/code/bashaform/example/honey1.demo/oci-micro-ubuntu.env
 shape='VM.Standard.E2.1.Micro'
 spec='Intel.c2.1G.50Gb'
 docs='https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshapes.htm#Compute_Shapes'
-
-# The image match string given references the first match
-# obtained from ~/code/bashiform/oci/images
-
 image='Canonical-Ubuntu-22.04-Minimal-20'
 user_data='enable_root.sh'
 ```
 
-The `box.env` file is minimal; `venue` references a file linked from a library
-of potential venues. A box may have several venues configured to select from. 
-Values in box, override defaults provided in the venue.
+The `box.env` file is specific but minimal; the venue fields, `location` and `type`
+reference files linked in from a library of potential venues. Values in `box.env`
+do override defaults provided there.
+
+A boxes folder may have several venues linked (though a symlink) to be available as options to select from. 
+
+```
+$> ls -l
+box.env
+honey.ssh_config
+oci-london-1.env -> ../../venues/oci/locs/london-1.env
+oci-micro-ubuntu.env -> ../../venues/oci/intances/free/micro_ubuntu.env
+```
 
 ## Oracle Cloud
 
 OCI is accessed though the `oci-cli` tool, which needs to be installed and configured
-for your tenancy, including ssh identity-files for access.
+for the tenancy, including ssh identity-files for access.
 
 ```
 oci setup config  # > ~/.oci/config
@@ -113,10 +123,10 @@ Welcome to Ubuntu 22.04.1 LTS (GNU/Linux 5.15.0-1029-oracle x86_64)
 root@honey1:~# 
 ```
 
-## Install anything - self-extracting archive packages
-
-A simple mechanism for installing an overlay of files onto the new system is provided via, `makeself` the self-extracting archive utility.
-
 ## Debug/Log levels
 
 Environment variables `QUIET, VERBOSE, DEBUG` control output
+
+## Install anything - self-extracting archive packages
+
+A simple mechanism for installing an overlay of files onto the new system will be provided via, `makeself` the self-extracting archive utility.

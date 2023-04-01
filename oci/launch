@@ -2,10 +2,11 @@
 
 # Strict Bash Mode
 set -euo pipefail
+
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-[[ -z ${TENANCY+x} ]] && source "$here/use" "" 
+[[ -z ${TENANCY+x} ]] && source "$here/use"
 
 QUIET=true source "$here/box"
 
@@ -51,7 +52,7 @@ options+=(--assign-public-ip true)
 
 shhd cyan echo oci compute instance launch "${options[@]}"
 
-loud yellow oci compute instance launch "${options[@]}"
+loud green oci compute instance launch "${options[@]}"
 
 #${BASH_SOURCE[0]%/*}/action ip $instance_name
 green ${BASH_SOURCE[0]%/*}/update_ip $instance_name
