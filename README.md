@@ -1,12 +1,15 @@
+
+![YAML FREE ZONE](https://badgen.net/badge/yaml/free/green)
+
 # angelbox/bashaform
 
-These scripts aim to provide the simplest possible cloud provider
-independent remote management of infrastucture in a way that can 
-be easily adopted into other projects.
+These scripts aim to provide the simplest possible remote management
+of infrastucture in a way that can be easily adopted
+into other projects.
 
 ## Folder based configuration
 
-Each cloud resource is managed has a folder and scripts find their 
+Each cloud resource managed has a folder and scripts find their 
 parameters from the current working directory.
 
 ```
@@ -17,8 +20,8 @@ $> ~/code/bashaform/oci/box
 box='honey1.demo'
 desc='Honey Pot Server'
 venue='oci-london'
+#venue='aws-london'
 
-overlay='~/code/nixbox/overlay/oci/Ubuntu/22.04/E2.1.Micro.ext4+NixOS/ROOT'
 # ~/code/bashaform/example/honey1.demo/oci-london.env
 zone='HllT:UK-LONDON-1-AD-1'
 subnet='subnet-default'
@@ -32,6 +35,7 @@ docs='https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshape
 
 image='Canonical-Ubuntu-22.04-Minimal-20'
 user_data='enable_root.sh'
+```
 
 The `box.env` file is minimal; `venue` references a file form a library of 
 potential venues. Each box may have multiple venues to select from.
@@ -39,13 +43,13 @@ potential venues. Each box may have multiple venues to select from.
 ## Oracle Cloud
 
 OCI is accessed though the `oci-cli` tool, which needs to be installed and configured
-for your tenancy, including ssh identity-files for accessing the cloud.
+for your tenancy, including ssh identity-files for access.
 
 ```
 oci setup config  # > ~/.oci/config
 ```
 
-The default configuration is created in `.oci/config`, but any other config file can be used via:
+The default configuration is created in `.oci/config`, but any other environment can be used via:
 
 ```
 ~/code/bashaform/oci/use ~/.oci/my-config
@@ -93,9 +97,9 @@ Host *honey1.demo*
     Hostname 143.47.238.158
 ```
 
-The Ubuntu image provided does not have the root user enabled. For consistency the `enable_root.sh` user data script is avialable as an optional extra to fix this. 
+The Ubuntu image provided does not have the root user enabled. For consistency the `enable_root.sh` user_data script is available as an optional extra to fix this. 
 
-As a result, assuming that `.ssh/config` includes the ssh_config file (via `Include ~/code/bashaform/*/*/*.ssh_config`), then the instance is immediately available.
+As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/code/bashaform/*/*/*.ssh_config`), 
 
 ```
 $> ssh honey.demo
@@ -104,8 +108,7 @@ Welcome to Ubuntu 22.04.1 LTS (GNU/Linux 5.15.0-1029-oracle x86_64)
 root@honey1:~# 
 ```
 
+## Install anything - self-extracting archive packages
 
-
-
-
+A simple mechanism for installing an overlay of files onto the new system is provided via, `makeself` the self-extracting archive utility.
 
