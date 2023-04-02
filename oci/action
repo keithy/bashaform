@@ -14,7 +14,7 @@ instance_name=${2:-$PWD}
 instance_name=${instance_name##*/}
 instance_name=${instance_name%.*}
 
-[[ -z ${TENANCY+x} ]] && source "$here/use" 
+source "$here/use" ""
 
 # Get the OCID of the instance with the specified display name
 instance_id=$(oci compute instance list \

@@ -6,7 +6,7 @@ set -euo pipefail
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-[[ -z ${TENANCY+x} ]] && source "$here/use" 
+source "$here/use" 
 
 # import box,shape,image
 [[ -z ${box+x} ]] && source "${PWD}/box.env"

@@ -7,7 +7,7 @@ here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
 # Get the tenancy ID from the OCI CLI config file
-[[ -z ${TENANCY+x} ]] && source "$here/use"
+source "$here/use"
 
 green oci compute instance list --compartment-id $TENANCY --output table \
     --query "data[*].{\"Name\":\"display-name\",\"State\":\"lifecycle-state\"}" 

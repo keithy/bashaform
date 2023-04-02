@@ -6,7 +6,7 @@ set -euo pipefail
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-[[ -z ${TENANCY+x} ]] && source ${BASH_SOURCE[0]%/*}/use
+source ${BASH_SOURCE[0]%/*}/use
 
 oci iam availability-domain list --compartment-id $TENANCY --all --query "data[*].name" 
 

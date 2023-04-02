@@ -55,8 +55,11 @@ oci-micro-ubuntu.env -> ../../venues/oci/intances/free/micro_ubuntu.env
 
 ## Oracle Cloud
 
-OCI is accessed though the `oci-cli` tool, which needs to be installed and configured
-for the tenancy, including ssh identity-files for access.
+OCI is accessed though the `oci-cli` tool, which needs to be installed separately and 
+configured for the tenancy, including ssh identity-files for access. 
+
+ Since oci-cli is in iself a python application it is preferable to install it via the nix
+ package manager (mac/linux) so that it is fully isolated and independent of other python installations in the OS.
 
 ```
 oci setup config  # > ~/.oci/config

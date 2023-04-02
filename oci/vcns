@@ -6,6 +6,6 @@ set -euo pipefail
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-[[ -z ${TENANCY+x} ]] && source "$here/use" 
+source "$here/use" 
 
 oci network vcn list --compartment-id $TENANCY # --query 'data[*].{VCNID:id,VCNName:"display-name"}'

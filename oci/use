@@ -1,7 +1,15 @@
 #!/usr/bin/env bash -l
 
-# Source this script to use non-default oci-cli 
-# config environment for scripts.
+# Manually source this script to use a non-default
+# oci-cli config environment for scripts.
+
+# Optional Argument - $1 - an oci-cli config environment file
+
+# If we are called by other scripts $1 will not be provided.
+# If $TENANCY already has a value then can skip importing
+# the default config.
+
+[[ -z ${1+x} ]] && [[ ${TENANCY+x} ]] && return
 
 # Set the path to your config file
 config_file_path="${1:-$HOME/.oci/config}"
