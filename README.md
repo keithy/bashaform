@@ -14,9 +14,9 @@ them to be easily adopted into and combined with other projects.
 Each cloud resource managed has a folder and scripts find their 
 parameters from the current working directory.
 
-```
-$> cd ~/code/bashaform/example/honey1.demo
-$> ~/code/bashaform/oci/box
+```console
+>$ cd ~/code/bashaform/example/honey1.demo`
+>$ ~/code/bashaform/oci/box
 
 # ~/code/bashaform/example/honey1.demo/box.env
 box='honey1.demo'
@@ -45,7 +45,7 @@ do override defaults provided there.
 
 A boxes folder may have several venues linked (though a symlink) to be available as options to select from. 
 
-```
+```console
 $> ls -l
 box.env
 honey.ssh_config
@@ -61,13 +61,13 @@ configured for the tenancy, including ssh identity-files for access.
  Since oci-cli is in iself a python application it is preferable to install it via the nix
  package manager (mac/linux) so that it is fully isolated and independent of other python installations in the OS.
 
-```
+```console
 oci setup config  # > ~/.oci/config
 ```
 
 The default configuration is created in `.oci/config`, but any other environment can be used via:
 
-```
+```console
 ~/code/bashaform/oci/use ~/.oci/my-config
 ```
 
@@ -79,11 +79,11 @@ The honey-pot server once provisioned, is configured and managed through the `an
 
 To show the whole lifecycle we begin by terminating the previous instance.
 
-```
+```console
 $ ~/code/bashaform/oci/action
 Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|SUSPEND|TERMINATE|STATUS|IP
 
-$> ~/code/bashaform/oci/action exterminate
+$ ~/code/bashaform/oci/action exterminate
 (exterminate - also terminates boot volume)
 Are you sure you want to delete this resource? [y/N]: y
 $> ~/code/bashaform/oci/status
@@ -97,8 +97,8 @@ $> ~/code/bashaform/oci/status
 
 Launching a new instance could not be easier.
 
-```
-$> ~/code/bashaform/oci/launch
+```console
+$ ~/code/bashaform/oci/launch
 
 Instance_name: honey1
 Shape: VM.Standard.E2.1.Micro
@@ -120,8 +120,8 @@ The Ubuntu image provided does not have the root user enabled. For consistency t
 
 As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/code/bashaform/example/*/*.ssh_config`), 
 
-```
-$> ssh honey.demo
+```console
+localhost$ ssh honey.demo
 Welcome to Ubuntu 22.04.1 LTS (GNU/Linux 5.15.0-1029-oracle x86_64)
 
 root@honey1:~# 
