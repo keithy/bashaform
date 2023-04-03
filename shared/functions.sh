@@ -43,3 +43,24 @@ read_env ()
  
     done < "$1"
 }
+
+add_options_from_env_prefixed ()
+{
+  local key value env_kv
+  local prefix="$1"
+
+  for env_kv in $(env); do
+    key="${env_kv%%=*}"
+    if [[ "$key" == "$prefix"* ]]; then
+      value="${!key}"
+      key="${key/$prefix/}"
+
+      #if [ "${value:0:1}" = "{" ]
+      #then #json
+      #  options+=( "${key//_/-}" "'$value'" )
+      #else
+        options+=( "${key//_/-}" "$value" )
+      #fi
+    fi
+  done
+}

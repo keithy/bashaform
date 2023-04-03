@@ -46,9 +46,11 @@ options+=(--subnet-id $subnet_id)
 options+=(--availability-domain "$zone")
 options+=(--ssh-authorized-keys-file "$ssh_pub_key")
 options+=(--wait-for-state RUNNING)
-options+=(--assign-public-ip true)
+[[ "${public_ip:-}" != "false" ]] && options+=(--assign-public-ip true)
 [[ -n ${user_data_uri+x} ]] && options+=(--user-data-file "${user_data_uri}")
 [[ -n ${user_data+x} ]] && options+=(--user-data-file "$here/user_data/${user_data}")
+
+add_options_from_env_prefixed oci_cli_launch_option
 
 shhd cyan echo oci compute instance launch "${options[@]}"
 

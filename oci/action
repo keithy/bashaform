@@ -21,7 +21,9 @@ instance_id=$(oci compute instance list \
   --compartment-id $TENANCY \
   --query "data[? \"display-name\" == '$instance_name' && \"lifecycle-state\" != 'TERMINATED' ].id | [0]" \
   --raw-output)
-  
+
+[[ -z "$instance_id" ]] && red echo "Instance ${instance_name} not found" && exit 1
+
 shhd yellow show instance_name instance_id
 
 # Perform action based on user input
@@ -38,14 +40,25 @@ case $action in
       --query "data[? id=='$instance_id'].\"lifecycle-state\" | [0]" \
       --raw-output
     ;;
-  TERMINATE)
-    oci compute instance terminate --instance-id "$instance_id"
+  EXTERMINATE)
+    echo "selected: EXTERMINATE (also terminates boot volume)"
+    oci compute instance terminate --instance-id "$instance_id" --preserve-boot-volume false
     ;;
-  IP)
+  TERMINATE)
+    echo "selected: TERMINATE (preserves boot volume)"
+    oci compute instance terminate --instance-id "$instance_id" --preserve-boot-volume true
+    ;;
+  IP | PUBLIC_IP )
     printf "$instance_name "
     
     oci compute instance list-vnics --instance-id "$instance_id" \
         --query "data[0].\"public-ip\"" --raw-output
+    ;;
+  PRIVATE_IP)
+    printf "$instance_name "
+    
+    oci compute instance list-vnics --instance-id "$instance_id" \
+        --query "data[0].\"private-ip\"" --raw-output
     ;;
   ID)
     printf "$instance_name $instance_id\n"
@@ -59,6 +72,6 @@ case $action in
         --query "data[? \"display-name\" == '$instance_name']"
     ;;
   *)
-    red echo "Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|SUSPEND|TERMINATE|STATUS|IP"
+    red echo "Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|SUSPEND|TERMINATE|EXTERMINATE|STATUS|IP"
     ;;
 esac

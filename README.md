@@ -83,7 +83,8 @@ To show the whole lifecycle we begin by terminating the previous instance.
 $ ~/code/bashaform/oci/action
 Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|SUSPEND|TERMINATE|STATUS|IP
 
-$> ~/code/bashaform/oci/action terminate
+$> ~/code/bashaform/oci/action exterminate
+(exterminate - also terminates boot volume)
 Are you sure you want to delete this resource? [y/N]: y
 $> ~/code/bashaform/oci/status
 +------------+-------------+
