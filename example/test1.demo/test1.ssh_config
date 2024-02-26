@@ -1,0 +1,7 @@
+Host *test1.demo*
+    IdentityFile ~/.ssh/rsa_console
+    User rocky
+    Port 22
+    Hostname 132.145.69.93
+
+    

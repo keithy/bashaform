@@ -1,5 +1,4 @@
 Host *honey1.demo*
-    User root
+    User rocky
     Port 22
-    Hostname 141.147.116.34
-    
+    Hostname 140.238.122.155

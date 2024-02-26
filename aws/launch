@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -euo pipefail
+
+# Set variables
+instance_name="${box%.*}"
+
+for ssh_pub_key in "${ssh_pub_key:-XYZ}" ~/.ssh/id_rsa.pub ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519_sk.pub $@
+do
+    [[ -f "$ssh_pub_key" ]] && break
+done
+
+# Get image ID (first match)
+if [[ -z ${image_id+x} ]]; then
+    image_id=$(aws ec2 describe-images --filters "Name=name,Values=$image" --query "Images[0].ImageId" --output text)
+fi
+
+[[ -z "$image_id" ]] && echo "image $image not found" && exit
+
+subnet_id=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=$subnet" --query "Subnets[0].SubnetId" --output text)
+
+[[ -z "$subnet_id" ]] && echo "subnet $subnet not found" && exit
+
+shh cyan show instance_name shape zone ssh_pub_key image_id subnet_id
+
+# Create instance
+options=()
+[[ "${public_ip:-}" != "false" ]] && options+=("--associate-public-ip-address")
+[[ -n ${user_data_uri+x} ]] && options+=("--user-data file://${user_data_uri}")
+[[ -n ${user_data+x} ]] && options+=("--user-data file://${user_data}")
+
+add_options_from_env_prefixed aws_cli_launch_option
+
+shhd cyan echo aws ec2 run-instances \
+    --instance-type "$shape" \
+    --image-id "$image_id" \
+    --subnet-id "$subnet_id" \
+    --key-name "$ssh_pub_key" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance_name}]" \
+    "${options[@]}"
+
+loud green instance_id=$(aws ec2 run-instances \
+    --instance-type "$shape" \
+    --image-id "$image_id" \
+    --subnet-id "$subnet_id" \
+    --key-name "$ssh_pub_key" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance_name}]" \
+    "${options[@]}" \
+    --query "Instances[0].InstanceId" \
+    --output text)
+
+green ${BASH_SOURCE[0]%/*}/update_ip "$instance_id" "$instance_name"

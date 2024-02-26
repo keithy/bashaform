@@ -27,3 +27,4 @@ read_env "${PWD}/${type}.env"
 # import box again to allow for overriding values
 read_env "${PWD}/box.env"
 
+cyan printf ""

@@ -22,8 +22,10 @@ done
 # compartment_id=$(oci iam compartment list --name $compartment_name --query "data[0].id" --raw-output)
 
 # Get image ID (first match)
-image_id=$(oci compute image list --compartment-id $TENANCY --all --raw-output \
-    --query "data[?starts_with( @.\"display-name\", '$image') ] | [0].id" )
+if [[ -z ${image_id+x} ]]; then
+    image_id=$(oci compute image list --compartment-id $TENANCY --all --raw-output \
+        --query "data[?starts_with( @.\"display-name\", '$image') ] | [0].id" )
+fi
 
 [[ -z "$image_id" ]] && echo "image $image not found" && exit
 

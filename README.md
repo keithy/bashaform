@@ -49,6 +49,10 @@ A boxes folder may have several venues linked (though a symlink) to be available
 $> ls -l
 box.env
 honey.ssh_config
+venues/oci/flex_ubuntu.env
+venues/oci/micro_ubuntu.env
+venues/oci/flex-go-large_ubuntu.env
+venues/oci/london-1.env
 oci-london-1.env -> ../../venues/oci/locs/london-1.env
 oci-micro-ubuntu.env -> ../../venues/oci/intances/free/micro_ubuntu.env
 ```
