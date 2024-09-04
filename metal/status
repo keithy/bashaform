@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -euo pipefail
+
+here="${BASH_SOURCE[0]%/*}"
+source "$here/../shared/functions.sh"
+
+for box_env in $(find .. -name box.env)
+do
+    read_env "$box_env" 
+    ssh "$box"+echo running || echo "$box" down 
+done
