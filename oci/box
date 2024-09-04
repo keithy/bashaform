@@ -12,17 +12,17 @@ loud cyan cat "${PWD}/box.env"
 # import box, venue etc.
 read_env "${PWD}/box.env"
 
-loud green echo "# ~${PWD/$HOME/}/${location}.env"
-loud cyan cat "${PWD}/${location}.env"
+loud green echo "# ${location}"
+loud cyan cat "${location}"
 
-loud green echo "# ~${PWD/$HOME/}/${type}.env"
-loud cyan cat "${PWD}/${type}.env"
+loud green echo "# ${type}"
+loud cyan cat "${type}"
 
 # import zone/subnet etc.
-read_env "${PWD}/${location}.env"
+read_env "${location}"
 
 # import shape,image etc.
-read_env "${PWD}/${type}.env"
+read_env "${type}"
 
 # import box again to allow for overriding values
 read_env "${PWD}/box.env"

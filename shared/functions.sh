@@ -1,4 +1,6 @@
 
+bashaform="${BASH_SOURCE[0]%/*/*/*/*}"
+
 # Output control
 DEBUG=${DEBUG:-false}
 VERBOSE=${VERBOSE:-true}
@@ -34,12 +36,14 @@ read_env ()
       if [[ "$variable_name" == "$line" ]]; then continue; fi
   
       variable_value="${line##*=\'}"
- 
+      variable_value="${variable_value%\'}"
+      variable_value="${variable_value/\$\{bashaform\}/$bashaform}"
+
       if [[ "$variable_name" != "PASS_PHRASE" ]]; then
-        shhd cyan echo "${variable_name}"="${variable_value%\'}"
+        shhd cyan echo "${variable_name}"="${variable_value}"
       fi
 
-      export "${variable_name}"="${variable_value%\'}"
+      export "${variable_name}"="${variable_value}"
  
     done < "$1"
 }

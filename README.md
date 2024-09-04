@@ -36,7 +36,7 @@ shape='VM.Standard.E2.1.Micro'
 spec='Intel.c2.1G.50Gb'
 docs='https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshapes.htm#Compute_Shapes'
 image='Canonical-Ubuntu-22.04-Minimal-20'
-user_data='enable_root.sh'
+user_data='enable_root.bash'
 ```
 
 The `box.env` file is specific but minimal; the venue fields, `location` and `type`
@@ -49,12 +49,12 @@ A boxes folder may have several venues linked (though a symlink) to be available
 $> ls -l
 box.env
 honey.ssh_config
-venues/oci/flex_ubuntu.env
-venues/oci/micro_ubuntu.env
-venues/oci/flex-go-large_ubuntu.env
-venues/oci/london-1.env
-oci-london-1.env -> ../../venues/oci/locs/london-1.env
-oci-micro-ubuntu.env -> ../../venues/oci/intances/free/micro_ubuntu.env
+oci/venues/flex_ubuntu.env
+oci/venues/micro_ubuntu.env
+oci/venues/flex-go-large_ubuntu.env
+oci/venues/london-1.env
+oci-london-1.env -> ../../oci/venues/locations/london-1.env
+oci-micro-ubuntu.env -> ../../oci/venues/intances/free/micro_ubuntu.env
 ```
 
 ## Oracle Cloud
@@ -120,7 +120,7 @@ Host *honey1.demo*
     Hostname 143.47.238.158
 ```
 
-The Ubuntu image provided does not have the root user enabled. For consistency the `enable_root.sh` user_data script is available as an optional extra to fix this. 
+The Ubuntu image provided does not have the root user enabled. For consistency the `enable_root.bash` user_data script is available as an optional extra to fix this. 
 
 As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/code/bashaform/example/*/*.ssh_config`), 
 
