@@ -1,14 +1,14 @@
 
-bashaform="${BASH_SOURCE[0]%/*/*/*/*}"
+bashaform="$here"
 
 # Output control
 DEBUG=${DEBUG:-false}
 VERBOSE=${VERBOSE:-true}
 QUIET=${QUIET:-false}
 
-loud   () { $QUIET && : $("$@") || >&2 "$@" ;}
-shh    () { $VERBOSE && >&2 "$@" || : $("$@"); }
-shhd   () { $DEBUG && >&2 "$@" || : $("$@"); }
+loud   () { ${QUIET:-false}   && : $("$@") || >&2 "$@" ;}
+shh    () { ${VERBOSE:-false} && >&2 "$@" || : $("$@"); }
+shhd   () { ${DEBUG:-false}   && >&2 "$@" || : $("$@"); }
 
 # Terminal colour
 green () { printf "\e[1m\e[32m" ; "$@" ; printf "\e[0m"; }
@@ -37,7 +37,6 @@ read_env ()
   
       variable_value="${line##*=\'}"
       variable_value="${variable_value%\'}"
-      variable_value="${variable_value/\$\{bashaform\}/$bashaform}"
 
       if [[ "$variable_name" != "PASS_PHRASE" ]]; then
         shhd cyan echo "${variable_name}"="${variable_value}"

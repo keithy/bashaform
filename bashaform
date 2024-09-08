@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+bashaform=$(dirname $(readlink -f "$BASH_SOURCE"))
+$bashaform/$@

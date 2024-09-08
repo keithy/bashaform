@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 
-# Strict Bash Mode
-set -euo pipefail
-
-here="${BASH_SOURCE[0]%/*}"
-source "$here/../shared/functions.sh"
-
-source ${BASH_SOURCE[0]%/*}/use
-
+QUIET=true source "${BASH_SOURCE[0]%/*}/box"
+ 
 oci iam availability-domain list --compartment-id $TENANCY --all --query "data[*].name" 
 

@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
-# Strict Bash Mode
-set -euo pipefail
-
-here="${BASH_SOURCE[0]%/*}"
-source "$here/../shared/functions.sh"
-
+QUIET=true source "${BASH_SOURCE[0]%/*}/box"
+ 
 # Parse input parameters
 action="${1:-XYZ}"
 action="${action^^}" # toUppercase
@@ -13,8 +9,6 @@ action="${action^^}" # toUppercase
 instance_name=${2:-$PWD}
 instance_name=${instance_name##*/}
 instance_name=${instance_name%.*}
-
-source "$here/use" ""
 
 # Get the OCID of the instance with the specified display name
 instance_id=$(oci compute instance list \

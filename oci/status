@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 
-# Strict Bash Mode
-set -euo pipefail
-
-here="${BASH_SOURCE[0]%/*}"
-source "$here/../shared/functions.sh"
-
-# Get the tenancy ID from the OCI CLI config file
-source "$here/use"
-
+QUIET=true source "${BASH_SOURCE[0]%/*}/box"
+ 
 green oci compute instance list --compartment-id $TENANCY --output table \
     --query "data[*].{\"Name\":\"display-name\",\"State\":\"lifecycle-state\"}" 

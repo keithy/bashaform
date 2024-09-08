@@ -1,14 +1,6 @@
 #!/usr/bin/env bash
 
-# Strict Bash Mode
-set -euo pipefail
-
-here="${BASH_SOURCE[0]%/*}"
-source "$here/../shared/functions.sh"
-
-source "$here/use"
-
-QUIET=true source "$here/box"
+QUIET=true source "${BASH_SOURCE[0]%/*}/box"
 
 # Set variables
 instance_name="${box%.*}"

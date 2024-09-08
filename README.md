@@ -3,20 +3,56 @@
 
 # angelbox/bashaform
 
-These scripts aim to provide the simplest possible remote management
+These scripts aim to provide the *simplest possible* remote management
 of infrastucture. Their license, minimalist and modular form allows 
-them to be easily adopted into and combined with other projects. 
+them to be easily adopted into and combined with other projects.
 
-* angelbox/angel a command line interface integrating this and other projects
+## Example
+
+```console
+# Scripts obtain the parameters for a single server
+# from the present working directory.
+
+$> cd ~code/bashaform/example/honey1.demo
+
+# long-form no installation required
+
+$> ~/code/bashaform/oci/action
+Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|
+         SUSPEND|TERMINATE|EXTERMINATE|STATUS|IP
+
+$> ~/code/bashaform/oci/action status
+honey1 RUNNING
+
+# short-form (install as an alias)
+$> alias bf=~/code/bashaform/bashaform
+
+# short form (install as a command)
+$> cd ~/bin ; ln -s ~/code/bashaform/bashaform ~/bin/bf ; cd -
+
+# Some scripts operate upon the whole tenancy (of the current server)
+$> bf oci/status
++------------+---------+
+| Name       | State   |
++------------+---------+
+| honey1     | RUNNING |
+| nameserver | RUNNING |
++------------+---------+
+```
 
 ## Folder based configuration
 
-Each cloud resource managed has a folder and scripts find their 
-parameters from the current working directory.
+The `box` script prints out the parameters defining the box:
+    
+    1. the box
+    2. the venue
+       1. the config (usually default)
+       2. the location, 
+       3. the type.
 
 ```console
 >$ cd ~/code/bashaform/example/honey1.demo`
->$ ~/code/bashaform/oci/box
+>$ bf oci/box
 
 # ~/code/bashaform/example/honey1.demo/box.env
 box='honey1.demo'
@@ -135,6 +171,11 @@ root@honey1:~#
 
 Environment variables `QUIET, VERBOSE, DEBUG` control output
 
-## Install anything - self-extracting archive packages
+## MacOS X / Dependencies
 
-A simple mechanism for installing an overlay of files onto the new system will be provided via, `makeself` the self-extracting archive utility.
+Installed from nixpkgs:
+nix-env -iA nixpkgs.bashInteractive
+nix-env -iA nixpkgs.mktemp
+nix-env -iA nixpkgs.gnused
+nix-env -iA nixpkgs.coreutils
+

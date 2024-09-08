@@ -6,25 +6,35 @@ set -euo pipefail
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-loud green echo "# ~${PWD/$HOME/}/box.env"
+loud green printf "\n[%s]\n\n" "~${PWD/$HOME/}/box.env"
 loud cyan cat "${PWD}/box.env"
 
 # import box, venue etc.
 read_env "${PWD}/box.env"
 
-loud green echo "# ${location}"
+loud green printf "\n[%s]\n\n" "${location}"
 loud cyan cat "${location}"
 
-loud green echo "# ${type}"
-loud cyan cat "${type}"
+loud green printf "\n[%s]\n\n" "${instance}"
+loud cyan cat "${instance}"
 
 # import zone/subnet etc.
 read_env "${location}"
 
 # import shape,image etc.
-read_env "${type}"
+read_env "${instance}"
 
 # import box again to allow for overriding values
 read_env "${PWD}/box.env"
 
 cyan printf ""
+
+oci_config="${oci_config:-}"
+oci_config="${oci_config/\~/$HOME}"
+oci_config="${oci_config/\$HOME/$HOME}"
+
+source "$here/use" "${oci_config}"
+
+loud green echo "# ${instance}"
+loud cyan echo "TENANCY=${TENANCY}"
+

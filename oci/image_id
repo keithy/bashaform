@@ -1,19 +1,9 @@
 #!/usr/bin/env bash
 
-# Strict Bash Mode
-set -euo pipefail
-
-here="${BASH_SOURCE[0]%/*}"
-source "$here/../shared/functions.sh"
-
-source ${BASH_SOURCE[0]%/*}/use
-
-# import box,shape,image
-[[ -z ${shape+x} ]] && source "${PWD}/$venue.env"
-
+QUIET=true source "${BASH_SOURCE[0]%/*}/box"
+ 
 echo oci compute image list --compartment-id $TENANCY \
      --query "data[?starts_with(@.\"display-name\", '$image') ]"
-
 
 # Get image ID (first match)
 oci compute image list --compartment-id $TENANCY --all \

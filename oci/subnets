@@ -1,19 +1,7 @@
 #!/usr/bin/env bash
 
-# Strict Bash Mode
-set -euo pipefail
-
-here="${BASH_SOURCE[0]%/*}"
-source "$here/../shared/functions.sh"
-
-source "$here/use" 
-
-# import box,shape,image
-[[ -z ${box+x} ]] && source "${PWD}/box.env"
-
-# import box,shape,image
-[[ -z ${shape+x} ]] && source "${PWD}/$venue.env"
-
+QUIET=true source "${BASH_SOURCE[0]%/*}/box"
+ 
 oci network subnet list --compartment-id $TENANCY # --query 'data[*].{VCNID:id,VCNName:"display-name"}'
 
 if [[ -n ${subnet+x} ]]; then

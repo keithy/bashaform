@@ -1,5 +1,7 @@
 #!/usr/bin/env bash -l
 
+source "${BASH_SOURCE[0]%/*}/../shared/functions.sh"
+
 # Manually source this script to use a non-default
 # oci-cli config environment for scripts.
 
@@ -16,7 +18,7 @@ config_file_path="${1:-$HOME/.oci/config}"
 
 # Check if the config file exists
 if [ ! -f $config_file_path ]; then
-  red echo "Config file not found."
+  red echo "Config file not found: ($config_file_path)"
   exit 1
 else
   shhd yellow echo "$config_file_path"
