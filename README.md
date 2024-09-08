@@ -47,32 +47,48 @@ The `box` script prints out the parameters defining the box:
     1. the box
     2. the venue
        1. the config (usually default)
-       2. the location, 
-       3. the type.
+       2. the location 
+       3. the type
 
 ```console
 >$ cd ~/code/bashaform/example/honey1.demo`
 >$ bf oci/box
 
-# ~/code/bashaform/example/honey1.demo/box.env
+[~/code/bashaform/example/honey1.demo/box.env]
+
+# Box
+
 box='honey1.demo'
 desc='Honey Pot Server'
 
 # Venue
-type='oci-micro-ubuntu'
-location='oci-london-1'
-#location='aws-london'
 
-# ~/code/bashaform/example/honey1.demo/oci-london-1.env
+# oci_config_file='~/.oci/config' # default
+# oci_config='DEFAULT'
+location='location/london-1.env'
+instance='oci_free/amd-micro_rocky.env'
+
+[location/london-1.env]
+
 zone='HllT:UK-LONDON-1-AD-1'
 subnet='subnet-default'
 
-# ~/code/bashaform/example/honey1.demo/oci-micro-ubuntu.env
+[oci_free/amd-micro_rocky.env]
+
 shape='VM.Standard.E2.1.Micro'
 spec='Intel.c2.1G.50Gb'
 docs='https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshapes.htm#Compute_Shapes'
-image='Canonical-Ubuntu-22.04-Minimal-20'
-user_data='enable_root.bash'
+
+# The image match string given references the first match
+# obtained from ~/code/bashiform/oci/images
+
+image='Rocky-8-OCP-8.7-20230405.0.x86_64.uefi'
+
+# not listed so... directly provide the ocid of the image we want
+image_id='ocid1.image.oc1..aaaaaaaa6ccbrxnbumu3pgej4fkz4hocepobygopdkwfyp5jxeww7ykrf2aq'
+
+# oci_free/amd-micro_rocky.env
+TENANCY=ocid1.tenancy.oc1..aaaaaaaaen5ebfkcxicvfofnjvjd5qc4ib3vrnirtqiddsoip7ztnfnuu2ga
 ```
 
 The `box.env` file is specific but minimal; the venue fields, `location` and `type`

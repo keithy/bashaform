@@ -29,12 +29,11 @@ read_env "${PWD}/box.env"
 
 cyan printf ""
 
-oci_config="${oci_config:-}"
-oci_config="${oci_config/\~/$HOME}"
-oci_config="${oci_config/\$HOME/$HOME}"
+oci_config_file="${oci_config_file:-}"
+oci_config_file="${oci_config_file/\~/$HOME}"
+oci_config_file="${oci_config_file/\$HOME/$HOME}"
 
-source "$here/use" "${oci_config}"
+source "$here/use" "${oci_config:-DEFAULT}" "${oci_config_file}"
 
-loud green echo "# ${instance}"
+loud green printf "\n[%s:%s]\n\n" "${oci_config_file:-~/.oci/config}" "${oci_config:-DEFAULT}"
 loud cyan echo "TENANCY=${TENANCY}"
-

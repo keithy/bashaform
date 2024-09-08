@@ -5,16 +5,17 @@ source "${BASH_SOURCE[0]%/*}/../shared/functions.sh"
 # Manually source this script to use a non-default
 # oci-cli config environment for scripts.
 
-# Optional Argument - $1 - an oci-cli config environment file
+# Optional Argument - $1 - an oci-cli config section name
+# Optional Argument - $2 - an oci-cli config environment file
 
-# If we are called by other scripts $1 will not be provided.
 # If $TENANCY already has a value then can skip importing
 # the default config.
 
-[[ -z ${1+x} ]] && [[ ${TENANCY+x} ]] && return
+[[ ${TENANCY+x} ]] && return
 
 # Set the path to your config file
-config_file_path="${1:-$HOME/.oci/config}"
+config_section="${1:-DEFAULT}"
+config_file_path="${2:-$HOME/.oci/config}"
 
 # Check if the config file exists
 if [ ! -f $config_file_path ]; then
@@ -25,22 +26,34 @@ else
 fi
 
 # Read the config file and export variables as environment variables
+
 while read -r line; do
 
-  variable_name="${line%%=*}"
+  if [[ "$line"==[* ]]; then
+    in_section=false
+  fi
 
-  # Skip any comments or blank lines
-  if [[ "$variable_name" =~ ^[#\[] ]] || [[ -z "$variable_name" ]]; then
-    continue
+  if [[ "$line"=="[$config_section]" ]]; then
+    in_section=true
+  fi
+
+  if $in_section
+  then
+    variable_name="${line%%=*}"
+
+    # Skip any comments or blank lines
+    if [[ "$variable_name" =~ ^[#\[] ]] || [[ -z "$variable_name" ]]; then
+      continue
+    fi
+  
+    variable_name="${variable_name^^}"
+    variable_value="${line##*=}"
+
+    if [[ "$variable_name" != "PASS_PHRASE" ]]; then
+      shhd cyan echo "${variable_name}"="$variable_value"
+    fi
+
+    export "${variable_name}"="$variable_value"
   fi
   
-  variable_name="${variable_name^^}"
-  variable_value="${line##*=}"
-
-  if [[ "$variable_name" != "PASS_PHRASE" ]]; then
-    shhd cyan echo "${variable_name}"="$variable_value"
-  fi
-
-  export "${variable_name}"="$variable_value"
- 
 done < "$config_file_path"
