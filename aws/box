@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -euo pipefail
+
+here="${BASH_SOURCE[0]%/*}"
+source "$here/../shared/functions.sh"
+
+read_box box.env
+read_location "${aws_location:-$location}"
+read_instance "${aws_instance:-$instance}"
+read_box box.env # allow box to override defaults
+
+aws_config_file="${aws_config_file:-}"
+aws_config_file="${aws_config_file/\~/$HOME}"
+aws_config_file="${aws_config_file/\$HOME/$HOME}"
+
+source "$here/use" "${aws_config:-DEFAULT}" "${aws_config_file}"
+
+loud green printf "\n[%s:%s]\n...\n" "${aws_config_file:-~/.aws/config}" "${aws_config:-DEFAULT}"
+loud cyan echo "TENANCY=${TENANCY}$NL..."

@@ -6,28 +6,10 @@ set -euo pipefail
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-loud green printf "\n[%s]\n\n" "~${PWD/$HOME/}/box.env"
-loud cyan cat "${PWD}/box.env"
-
-# import box, venue etc.
-read_env "${PWD}/box.env"
-
-loud green printf "\n[%s]\n\n" "${location}"
-loud cyan cat "${location}"
-
-loud green printf "\n[%s]\n\n" "${instance}"
-loud cyan cat "${instance}"
-
-# import zone/subnet etc.
-read_env "${location}"
-
-# import shape,image etc.
-read_env "${instance}"
-
-# import box again to allow for overriding values
-read_env "${PWD}/box.env"
-
-cyan printf ""
+read_box box.env
+read_location "${oci_location:-$location}"
+read_instance "${oci_instance:-$instance}"
+read_box box.env # allow box to override defaults
 
 oci_config_file="${oci_config_file:-}"
 oci_config_file="${oci_config_file/\~/$HOME}"
@@ -35,5 +17,5 @@ oci_config_file="${oci_config_file/\$HOME/$HOME}"
 
 source "$here/use" "${oci_config:-DEFAULT}" "${oci_config_file}"
 
-loud green printf "\n[%s:%s]\n\n" "${oci_config_file:-~/.oci/config}" "${oci_config:-DEFAULT}"
-loud cyan echo "TENANCY=${TENANCY}"
+loud green printf "\n[%s:%s]\n...\n" "${oci_config_file:-~/.oci/config}" "${oci_config:-DEFAULT}"
+loud cyan echo "TENANCY=${TENANCY}$NL..."

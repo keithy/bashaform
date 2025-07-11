@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# https://www.reddit.com/r/oraclecloud/comments/12s7tta/how_do_you_find_an_image_ocid/
+
+QUIET=true source "${BASH_SOURCE[0]%/*}/box"
+
+oci compute pic version list --listing-id "$1" | jq -r '.data[]."listing-resource-id"'

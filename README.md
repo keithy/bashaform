@@ -3,9 +3,21 @@
 
 # angelbox/bashaform
 
-These scripts aim to provide the *simplest possible* remote management
-of infrastucture. Their license, minimalist and modular form allows 
-them to be easily adopted into and combined with other projects.
+The *simplest possible* remote management of infrastucture. 
+The license, simplicity and modular form allows these scripts
+to be easily adopted into and combined with other projects.
+
+## Installation
+
+```
+$> git clone https://github.com/keithy/bashaform.git ~/code/bashaform
+```
+
+Prepend to `~/.ssh/config`
+
+```
+Include ~/code/bashaform/*/*/*.ssh_config
+```
 
 ## Example
 
@@ -87,26 +99,26 @@ image='Rocky-8-OCP-8.7-20230405.0.x86_64.uefi'
 # not listed so... directly provide the ocid of the image we want
 image_id='ocid1.image.oc1..aaaaaaaa6ccbrxnbumu3pgej4fkz4hocepobygopdkwfyp5jxeww7ykrf2aq'
 
-# oci_free/amd-micro_rocky.env
+[~/.oci/config:DEFAULT]
+...
 TENANCY=ocid1.tenancy.oc1..aaaaaaaaen5ebfkcxicvfofnjvjd5qc4ib3vrnirtqiddsoip7ztnfnuu2ga
+...
 ```
 
-The `box.env` file is specific but minimal; the venue fields, `location` and `type`
-reference files linked in from a library of potential venues. Values in `box.env`
-do override defaults provided there.
+The `box.env` file is specific but minimal; the venue fields, `location` and `instance`
+reference files linked in from a library of potential venues. However values in `box.env` do override defaults provided there.
 
-A boxes folder may have several venues linked (though a symlink) to be available as options to select from. 
+A box's folder may have several venues linked (though symlinks) available as options to select from.
 
 ```console
 $> ls -l
 box.env
 honey.ssh_config
-oci/venues/flex_ubuntu.env
-oci/venues/micro_ubuntu.env
-oci/venues/flex-go-large_ubuntu.env
-oci/venues/london-1.env
-oci-london-1.env -> ../../oci/venues/locations/london-1.env
-oci-micro-ubuntu.env -> ../../oci/venues/intances/free/micro_ubuntu.env
+location/london-1.env -> ../../../oci/location/london-1.env
+oci_free/amd-micro_rocky.env -> ../../../oci/instance/free/amd-micro_rocky.env
+oci_free/amd-micro_ubuntu.env -> ../../../oci/instance/free/amd-micro_ubuntu.env
+oci_free/ampere-flex_rocky.2c.12G.50Gb.env -> ../../../oci/instance/free/ampere-flex_rocky.2c.12G.50Gb.env
+oci_free/ampere-flex_ubuntu.2c.12G.50Gb.env -> ../../../oci/instance/free/ampere-flex_ubuntu.2c.12G.50Gb.env
 ```
 
 ## Oracle Cloud
@@ -121,17 +133,19 @@ configured for the tenancy, including ssh identity-files for access.
 oci setup config  # > ~/.oci/config
 ```
 
-The default configuration is created in `.oci/config`, but any other environment can be used via:
+The default configuration is created in `.oci/config`, but any other file can be specified in `box.env`.
 
 ```console
-~/code/bashaform/oci/use ~/.oci/my-config
+# box.env
+oci_config_file='~/.oci/config2'
+oci_config='MY_CLOUD'
 ```
 
-NOTE: The tenancy 'subnet' will need to be renamed to the value expected, 'subnet-default' is the default used in the venue files provided. (this may be overriden on an individual basis in box.env) 
+NOTE: The tenancy 'subnet' will need to be renamed to the value expected, 'subnet-default' is the default used in the venue files provided. (this may be overriden on an individual basis in `box.env`) 
 
 ## Example - honey pot
 
-The honey-pot server once provisioned, is configured and managed through the `angelbox/nixbox` project. Here we just handle provisioning.
+The honey-pot server example once provisioned, is configured and managed through the `angelbox/nixbox` project. Here we just handle provisioning.
 
 To show the whole lifecycle we begin by terminating the previous instance.
 
@@ -172,7 +186,7 @@ Host *honey1.demo*
     Hostname 143.47.238.158
 ```
 
-The Ubuntu image provided does not have the root user enabled. For consistency the `enable_root.bash` user_data script is available as an optional extra to fix this. 
+The Ubuntu image provided does not have the root user enabled. For consistency the `user_data/ubuntu/enable_root.bash` script is available as an optional extra to fix this. 
 
 As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/code/bashaform/example/*/*.ssh_config`), 
 
@@ -190,8 +204,13 @@ Environment variables `QUIET, VERBOSE, DEBUG` control output
 ## MacOS X / Dependencies
 
 Installed from nixpkgs:
+
+```
 nix-env -iA nixpkgs.bashInteractive
 nix-env -iA nixpkgs.mktemp
-nix-env -iA nixpkgs.gnused
 nix-env -iA nixpkgs.coreutils
-
+nix-env -iA nixpkgs.azure-cli
+nix-env -iA nixpkgs.aws-cli
+nix-env -iA nixpkgs.oci-cli
+# nix-env -iA nixpkgs.gnused
+```

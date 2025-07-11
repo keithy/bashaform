@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+QUIET=true source "${BASH_SOURCE[0]%/*}/box"
+
+# Set variables
+instance_name="${box%.*}"
+
+# Find the SSH public key
+for ssh_pub_key in "${ssh_pub_key:-XYZ}" ~/.ssh/id_rsa.pub ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519_sk.pub $@
+do
+    [[ -f "$ssh_pub_key" ]] && break
+done
+
+# Find resource group
+if [[ -z ${resource_group+x} ]]; then
+    echo "Resource group is required."
+    exit 1
+fi
+
+# Get the image ID (first match)
+if [[ -z ${image_id+x} ]]; then
+    image_id=$(az vm image list --all --query "[?contains(publisher, '$publisher') && contains(offe...
+fi
+
+[[ -z "$image_id" ]] && echo "Image with publisher $publisher not found" && exit
+
+# Get subnet ID
+subnet_id=$(az network vnet subnet list --resource-group $resource_group --vnet-name $vnet_name --query "[@.name=='$subnet']" --output tsv)
+
+[[ -z "$subnet_id" ]] && echo "Subnet $subnet not found" && exit
+
+# Display variables
+echo "Instance Name: $instance_name"
+echo "Shape: $shape"
+echo "Zone: $zone"
+echo "SSH Public Key: $ssh_pub_key"
+echo "Image ID: $image_id"
+echo "Subnet ID: $subnet_id"
+
+# Create instance
+options=()
+$VERBOSE && export AZURE_LOG_LEVEL=INFO
+$DEBUG && options+=(--debug)
+options+=(--resource-group $resource_group)
+options+=(--name $instance_name)
+options+=(--size $size)
+options+=(--image "$image_id")
+options+=(--vnet-name $vnet_name)
+options+=(--subnet $subnet_id)
+options+=(--availability-set $availability_set)
+options+=(--ssh-key-values "$ssh_pub_key")
+[[ "${public_ip:-}" != "false" ]] && options+=(--public-ip-address)
+[[ -n ${user_data_uri+x} ]] && options+=(--custom-data "${user_data_uri}")
+[[ -n ${user_data+x} ]] && options+=(--custom-data "$here/user_data/${user_data}")
+
+echo "az vm create ${options[@]}"
+
+az vm create "${options[@]}"
+
+# Update IP address
+echo "${BASH_SOURCE[0]%/*}/update_ip $instance_name"

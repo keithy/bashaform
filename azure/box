@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -aeuo pipefail
+
+here="${BASH_SOURCE[0]%/*}"
+source "$here/../shared/functions.sh"
+
+read_box box.env
+read_location "${azure_location:-$location}"
+read_instance "${azure_instance:-$instance}"
+read_box box.env # allow box to override defaults
+
+azure_config_file="${azure_config_file:-$HOME/.azure/azureProfile.json}"
+azure_config_file="${azure_config_file/\~/$HOME}"
+azure_config_file="${azure_config_file/\$HOME/$HOME}"
+
+azure_subscription_name="${azure_subscription_name:-Azure subscription 1}"
+
+source "$here/use" "${azure_subscription_name}" "${azure_config_file}"
+
+loud green printf "\n[%s:%s]\n...\n" "${azure_config_file}" "${azure_subscription_name}"
+
+loud cyan echo "TENANTID=${TENANTID:-}$NL..."

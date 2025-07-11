@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 QUIET=true source "${BASH_SOURCE[0]%/*}/box"
- 
+
 oci compute image list --compartment-id $TENANCY --all --query "data[*].\"display-name\"" 
+

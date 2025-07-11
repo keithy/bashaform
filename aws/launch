@@ -22,7 +22,7 @@ subnet_id=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=$subnet" --
 
 [[ -z "$subnet_id" ]] && echo "subnet $subnet not found" && exit
 
-shh cyan show instance_name shape zone ssh_pub_key image_id subnet_id
+verbose cyan show instance_name shape zone ssh_pub_key image_id subnet_id
 
 # Create instance
 options=()
@@ -32,7 +32,7 @@ options=()
 
 add_options_from_env_prefixed aws_cli_launch_option
 
-shhd cyan echo aws ec2 run-instances \
+debug cyan echo aws ec2 run-instances \
     --instance-type "$shape" \
     --image-id "$image_id" \
     --subnet-id "$subnet_id" \

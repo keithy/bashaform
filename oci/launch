@@ -26,7 +26,7 @@ subnet_id=$(oci network subnet list --compartment-id $TENANCY --all --raw-output
 
 [[ -z "$subnet_id" ]] && echo "subnet $subnet not found" && exit
 
-shh cyan show instance_name shape zone ssh_pub_key image_id subnet_id 
+verbose cyan show instance_name shape zone ssh_pub_key image_id subnet_id 
 
 # Create instance
 options=()
@@ -46,7 +46,7 @@ options+=(--wait-for-state RUNNING)
 
 add_options_from_env_prefixed oci_cli_launch_option
 
-shhd cyan echo oci compute instance launch "${options[@]}"
+debug cyan echo oci compute instance launch "${options[@]}"
 
 loud green oci compute instance launch "${options[@]}"
 

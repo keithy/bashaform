@@ -18,7 +18,7 @@ instance_id=$(oci compute instance list \
 
 [[ -z "$instance_id" ]] && red echo "Instance ${instance_name} not found" && exit 1
 
-shhd yellow show instance_name instance_id
+debug yellow show instance_name instance_id
 
 # Perform action based on user input
 case $action in

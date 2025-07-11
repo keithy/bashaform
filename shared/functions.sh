@@ -1,14 +1,13 @@
 
-bashaform="$here"
-
 # Output control
 DEBUG=${DEBUG:-false}
 VERBOSE=${VERBOSE:-true}
 QUIET=${QUIET:-false}
+NL=$'\n'
 
 loud   () { ${QUIET:-false}   && : $("$@") || >&2 "$@" ;}
-shh    () { ${VERBOSE:-false} && >&2 "$@" || : $("$@"); }
-shhd   () { ${DEBUG:-false}   && >&2 "$@" || : $("$@"); }
+verbose    () { ${VERBOSE:-false} && >&2 "$@" || : $("$@"); }
+debug   () { ${DEBUG:-false}   && >&2 "$@" || : $("$@"); }
 
 # Terminal colour
 green () { printf "\e[1m\e[32m" ; "$@" ; printf "\e[0m"; }
@@ -19,7 +18,7 @@ yellow () { printf "\e[1m\e[33m" && "$@" && printf "\e[0m" ; }
 show ()
 {
     for v in "$@"; do
-        printf "%s: %s\n" "${v^}" "${!v}"
+        printf "%s=%s\n" "${v}" "${!v}"
     done
 }
 
@@ -39,7 +38,7 @@ read_env ()
       variable_value="${variable_value%\'}"
 
       if [[ "$variable_name" != "PASS_PHRASE" ]]; then
-        shhd cyan echo "${variable_name}"="${variable_value}"
+        debug cyan echo "${variable_name}"="${variable_value}"
       fi
 
       export "${variable_name}"="${variable_value}"
@@ -66,4 +65,35 @@ add_options_from_env_prefixed ()
       #fi
     fi
   done
+}
+
+read_box ()
+{
+  box="${1%}"
+
+  loud green printf "\n[%s]\n\n" "~${PWD/$HOME/}/$box"
+  loud cyan cat "${PWD}/$box"
+
+  # import box, venue etc.
+  read_env "${PWD}/$box"
+}
+
+read_location ()
+{
+  location="$1"
+  loud green printf "\n[%s]\n\n" "${location}"
+  loud cyan cat "${location}"
+
+  # import zone/subnet etc.
+  read_env "${location}"
+}
+
+read_instance ()
+{
+  instance="$1"
+  loud green printf "\n[%s]\n\n" "${instance}"
+  loud cyan cat "${instance}"
+
+  # import shape,image etc.
+  read_env "${instance}"
 }

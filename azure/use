@@ -1,0 +1,72 @@
+#!/usr/bin/env bash -l
+
+# Source shared functions
+source "${BASH_SOURCE[0]%/*}/../shared/functions.sh"
+
+# Optional Argument - $1 - a section name from the config file
+# Optional Argument - $2 - the path to the config file
+
+azure_subscription_name="${1:-Azure subscription 1}"
+azure_config_file="${2:-$HOME/.azure/azureProfile.json}"
+
+# If $TENANTID already has a value then skip importing
+[[ -n ${TENANTID+x} ]] && return
+
+# Check if the config file exists
+if [ ! -f "$azure_config_file" ]; then
+  red echo "Config file not found: ($azure_config_file)"
+  exit 1
+else
+  debug yellow echo "$azure_config_file"
+fi
+
+# Extract subscription data based on the subscription name
+subscription_data=$(jq -r --arg name "$azure_subscription_name" '
+  .subscriptions[] | select(.name == $name)
+' "$azure_config_file")
+
+# Check if subscription data is empty
+if [ -z "$subscription_data" ]; then
+  red echo "Subscription '$azure_subscription_name' not found in config file."
+  exit 1
+fi
+
+# Extract and export user name > ACCOUNT EMAIL
+user_name=$(echo "$subscription_data" | jq -r '.user.name')
+
+if [ -n "$user_name" ]; then
+  debug cyan echo "ACCOUNT_EMAIL=${user_name}"
+  export ACCOUNT_EMAIL="${user_name}"
+else
+  red echo "User name not found for subscription '$azure_subscription_name'."
+fi
+
+# Export other variables from the JSON data
+while IFS= read -r line; do
+  if [[ "$line" =~ ^[^=]+=[^=]+$ ]]; then
+    variable_name="${line%%=*}"
+    variable_value="${line##*=}"
+
+    # Skip any comments or blank lines
+    if [[ -z "$variable_name" || "$variable_name" =~ ^[#\[] ]]; then
+      continue
+    fi
+
+    # Convert variable names to uppercase for environment variable naming
+    variable_name="${variable_name^^}"
+
+    # Skip USER
+    #if [[ "USER" == "$variable_name" ]]; then
+    #  continue
+    #fi
+
+    if [[ "$variable_name" != "PASS_PHRASE" ]]; then
+      debug cyan echo "${variable_name}='$variable_value'"
+    fi
+
+    # Export the variable
+    export "${variable_name}"="${variable_value}"
+
+  fi
+done < <(echo "$subscription_data" | jq -r 'to_entries[] | "\(.key)=\(.value)"')
+

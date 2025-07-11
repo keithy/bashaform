@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
 
+# install as an alias
+# $> alias bf=~/code/bashaform/bashaform
+
+# install as a command
+# $> cd ~/bin ; ln -s ~/code/bashaform/bashaform ~/bin/bf ; cd -
+
+# usage
+# $> bf oci/status
+
 bashaform=$(dirname $(readlink -f "$BASH_SOURCE"))
 $bashaform/$@

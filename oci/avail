@@ -2,5 +2,8 @@
 
 QUIET=true source "${BASH_SOURCE[0]%/*}/box"
  
-oci iam availability-domain list --compartment-id $TENANCY --all --query "data[*].name" 
+oci iam availability-domain list \
+    --compartment-id $TENANCY \
+    --all \
+    --query "data[*].name" 
 
