@@ -10,13 +10,13 @@ to be easily adopted into and combined with other projects.
 ## Installation
 
 ```
-$> git clone https://github.com/keithy/bashaform.git ~/code/bashaform
+$> git clone https://github.com/keithy/bashaform.git ~/angelbox/bashaform
 ```
 
 Prepend to `~/.ssh/config`
 
 ```
-Include ~/code/bashaform/*/*/*.ssh_config
+Include ~/angelbox/*/*/*/*.ssh_config
 ```
 
 ## Example
@@ -25,22 +25,22 @@ Include ~/code/bashaform/*/*/*.ssh_config
 # Scripts obtain the parameters for a single server
 # from the present working directory.
 
-$> cd ~code/bashaform/example/honey1.demo
+$> cd ~/angelbox/bashaform/example/honey1.demo
 
 # long-form no installation required
 
-$> ~/code/bashaform/oci/action
+$> ~/angelbox/bashaform/oci/action
 Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|
          SUSPEND|TERMINATE|EXTERMINATE|STATUS|IP
 
-$> ~/code/bashaform/oci/action status
+$> ~/angelbox/bashaform/oci/action status
 honey1 RUNNING
 
 # short-form (install as an alias)
-$> alias bf=~/code/bashaform/bashaform
+$> alias bf=~/angelbox/bashaform/bashaform
 
-# short form (install as a command)
-$> cd ~/bin ; ln -s ~/code/bashaform/bashaform ~/bin/bf ; cd -
+# short form (install as an executable)
+$> cd ~/bin ; ln -s ~/angelbox/bashaform/bashaform ~/bin/bf ; cd -
 
 # Some scripts operate upon the whole tenancy (of the current server)
 $> bf oci/status
@@ -63,10 +63,10 @@ The `box` script prints out the parameters defining the box:
        3. the type
 
 ```console
->$ cd ~/code/bashaform/example/honey1.demo`
+>$ cd ~/angelbox/bashaform/example/honey1.demo`
 >$ bf oci/box
 
-[~/code/bashaform/example/honey1.demo/box.env]
+[~/angelbox/bashaform/example/honey1.demo/box.env]
 
 # Box
 
@@ -92,7 +92,7 @@ spec='Intel.c2.1G.50Gb'
 docs='https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshapes.htm#Compute_Shapes'
 
 # The image match string given references the first match
-# obtained from ~/code/bashiform/oci/images
+# obtained from ~/angelbox/bashaform/oci/images
 
 image='Rocky-8-OCP-8.7-20230405.0.x86_64.uefi'
 
@@ -150,13 +150,13 @@ The honey-pot server example once provisioned, is configured and managed through
 To show the whole lifecycle we begin by terminating the previous instance.
 
 ```console
-$ ~/code/bashaform/oci/action
+$ ~/angelbox/bashaform/oci/action
 Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|SUSPEND|TERMINATE|STATUS|IP
 
-$ ~/code/bashaform/oci/action exterminate
+$ ~/angelbox/bashaform/oci/action exterminate
 (exterminate - also terminates boot volume)
 Are you sure you want to delete this resource? [y/N]: y
-$> ~/code/bashaform/oci/status
+$> ~/angelbox/bashaform/oci/status
 +------------+-------------+
 | Name       | State       |
 +------------+-------------+
@@ -168,7 +168,7 @@ $> ~/code/bashaform/oci/status
 Launching a new instance could not be easier.
 
 ```console
-$ ~/code/bashaform/oci/launch
+$ ~/angelbox/bashaform/oci/launch
 
 Instance_name: honey1
 Shape: VM.Standard.E2.1.Micro
@@ -188,7 +188,7 @@ Host *honey1.demo*
 
 The Ubuntu image provided does not have the root user enabled. For consistency the `user_data/ubuntu/enable_root.bash` script is available as an optional extra to fix this. 
 
-As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/code/bashaform/example/*/*.ssh_config`), 
+As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/angelbox/bashaform/example/*/*.ssh_config`), 
 
 ```console
 localhost$ ssh honey.demo

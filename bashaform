@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # install as an alias
-# $> alias bf=~/code/bashaform/bashaform
+# $> alias bf=~/angelbox/bashaform/bashaform
 
 # install as a command
-# $> cd ~/bin ; ln -s ~/code/bashaform/bashaform ~/bin/bf ; cd -
+# $> cd ~/bin ; ln -s ~/angelbox/bashaform/bashaform ~/bin/bf ; cd -
 
 # usage
 # $> bf oci/status
