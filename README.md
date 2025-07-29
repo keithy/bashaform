@@ -9,6 +9,8 @@ to be easily adopted into and combined with other projects.
 
 ## Installation
 
+Assuming that we are included as a submodule in another project.
+
 ```
 $> git clone https://github.com/keithy/bashaform.git ~/angelbox/bashaform
 ```
@@ -25,9 +27,9 @@ Include ~/angelbox/*/*/*/*.ssh_config
 # Scripts obtain the parameters for a single server
 # from the present working directory.
 
-$> cd ~/angelbox/bashaform/example/honey1.demo
+$> cd ~/angelbox/bashaform/examples.demo/honey1.demo
 
-# long-form no installation required
+# long-form: no installation required
 
 $> ~/angelbox/bashaform/oci/action
 Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|
@@ -63,10 +65,10 @@ The `box` script prints out the parameters defining the box:
        3. the type
 
 ```console
->$ cd ~/angelbox/bashaform/example/honey1.demo`
+>$ cd ~/angelbox/bashaform/examples.demo/honey1.demo`
 >$ bf oci/box
 
-[~/angelbox/bashaform/example/honey1.demo/box.env]
+[~/angelbox/bashaform/examples.demo/honey1.demo/box.env]
 
 # Box
 
@@ -126,8 +128,10 @@ oci_free/ampere-flex_ubuntu.2c.12G.50Gb.env -> ../../../oci/instance/free/ampere
 OCI is accessed though the `oci-cli` tool, which needs to be installed separately and 
 configured for the tenancy, including ssh identity-files for access. 
 
- Since oci-cli is in iself a python application it is preferable to install it via the nix
- package manager (mac/linux) so that it is fully isolated and independent of other python installations in the OS.
+ Since oci-cli is in iself a python application it is preferable to install in an isolated manner.
+ The nix package manager (mac/linux) provides a fully isolated and independent installations.
+ Mise-en-place also does a good job (note: at the time of writing, `oci-cli` does not support `python@3.13`)
+ [see angelbox which uses mise-en-place]
 
 ```console
 oci setup config  # > ~/.oci/config
@@ -188,7 +192,7 @@ Host *honey1.demo*
 
 The Ubuntu image provided does not have the root user enabled. For consistency the `user_data/ubuntu/enable_root.bash` script is available as an optional extra to fix this. 
 
-As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/angelbox/bashaform/example/*/*.ssh_config`), 
+As a result the instance is immediately available. (assuming that `.ssh/config` includes the ssh_config file via `Include ~/angelbox/bashaform/examples.demo/*/*.ssh_config`), 
 
 ```console
 localhost$ ssh honey.demo
@@ -213,4 +217,10 @@ nix-env -iA nixpkgs.azure-cli
 nix-env -iA nixpkgs.aws-cli
 nix-env -iA nixpkgs.oci-cli
 # nix-env -iA nixpkgs.gnused
+```
+
+## EndeavourOS/Arch dependencies
+
+```
+bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh)"
 ```
