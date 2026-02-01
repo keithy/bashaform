@@ -7,6 +7,9 @@ bashaform="${BASH_SOURCE[0]%/*}"
 source "${bashaform}/shared/functions.sh"
 
 read_box box.env # first pass
+
+[[ -z "${cloud:-}" ]] && error "cloud is not set in box.env" && exit 1
+
 source "${bashaform}/${cloud}/_functions.sh"
 
 read_named "${cloud}_location"
