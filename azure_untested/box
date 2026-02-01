@@ -6,10 +6,10 @@ set -aeuo pipefail
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-read_box box.env
-read_location "${azure_location:-$location}"
-read_instance "${azure_instance:-$instance}"
-read_box box.env # allow box to override defaults
+read_box box.env # first pass
+read_named "${cloud}_location"
+read_named "${cloud}_instance"
+read_box box.env # second pass - allow box.env to override defaults
 
 azure_config_file="${azure_config_file:-$HOME/.azure/azureProfile.json}"
 azure_config_file="${azure_config_file/\~/$HOME}"

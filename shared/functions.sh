@@ -5,15 +5,15 @@ VERBOSE=${VERBOSE:-true}
 QUIET=${QUIET:-false}
 NL=$'\n'
 
-loud   () { ${QUIET:-false}   && : $("$@") || >&2 "$@" ;}
-verbose    () { ${VERBOSE:-false} && >&2 "$@" || : $("$@"); }
-debug   () { ${DEBUG:-false}   && >&2 "$@" || : $("$@"); }
+loud    () { ${QUIET:-false}   && : $("$@") || >&2 "$@" ;}
+verbose () { ${VERBOSE:-false} && >&2 "$@"  || : $("$@"); }
+debug   () { ${DEBUG:-false}   && >&2 "$@"  || : $("$@"); }
 
 # Terminal colour
-green () { printf "\e[1m\e[32m" ; "$@" ; printf "\e[0m"; }
-red    () { printf "\e[1m\e[31m" ; "$@" ; printf "\e[0m"; }
-cyan   () { printf "\e[1m\e[36m" && "$@" && printf "\e[0m" ; }
-yellow () { printf "\e[1m\e[33m" && "$@" && printf "\e[0m" ; }
+green  () { printf "\e[1m\e[32m" ; "$@" ;   printf "\e[0m"; }
+red    () { printf "\e[1m\e[31m" ; "$@" ;   printf "\e[0m"; }
+cyan   () { printf "\e[1m\e[36m" && "$@" && printf "\e[0m"; }
+yellow () { printf "\e[1m\e[33m" && "$@" && printf "\e[0m"; }
 
 show ()
 {
@@ -71,6 +71,8 @@ read_box ()
 {
   box="${1%}"
 
+  [[ ! -f "${PWD}/$box" ]] && loud red echo "File $box not found (run from a server definition folder)." && return 1
+
   loud green printf "\n[%s]\n\n" "~${PWD/$HOME/}/$box"
   loud cyan cat "${PWD}/$box"
 
@@ -78,19 +80,9 @@ read_box ()
   read_env "${PWD}/$box"
 }
 
-read_location ()
+read_named ()
 {
-  location="$1"
-  loud green printf "\n[%s]\n\n" "${location}"
-  loud cyan cat "${location}"
-
-  # import zone/subnet etc.
-  read_env "${location}"
-}
-
-read_instance ()
-{
-  instance="$1"
+  instance="${!1}" # by name
   loud green printf "\n[%s]\n\n" "${instance}"
   loud cyan cat "${instance}"
 

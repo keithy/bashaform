@@ -6,10 +6,12 @@ set -euo pipefail
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-read_box box.env
-read_location "${aws_location:-$location}"
-read_instance "${aws_instance:-$instance}"
-read_box box.env # allow box to override defaults
+read_box box.env # first pass
+source "$here/../${cloud}/functions.sh"
+
+read_named "${cloud}_location"
+read_named "${cloud}_instance"
+read_box box.env # second pass - allow box.env to override defaults
 
 aws_config_file="${aws_config_file:-}"
 aws_config_file="${aws_config_file/\~/$HOME}"

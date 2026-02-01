@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -euo pipefail
+
+bashaform="${BASH_SOURCE[0]%/*}"
+cmd="${BASH_SOURCE[0]##*/}"
+source "$bashaform/shared/functions.sh"
+
+QUIET=true read_box box.env # first pass
+
+source "$bashaform/$cloud/$cmd" $@

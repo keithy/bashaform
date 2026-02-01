@@ -17,6 +17,9 @@ source "${BASH_SOURCE[0]%/*}/../shared/functions.sh"
 config_section="${1:-DEFAULT}"
 config_file_path="${2:-$HOME/.oci/config}"
 
+config_file_path="${config_file_path/\~/$HOME}"
+config_file_path="${config_file_path/\$HOME/$HOME}"
+
 # Check if the config file exists
 if [ ! -f $config_file_path ]; then
   red echo "Config file not found: ($config_file_path)"

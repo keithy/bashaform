@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Strict Bash Mode
+set -euo pipefail
+
+bashaform="${BASH_SOURCE[0]%/*}"
+source "${bashaform}/shared/functions.sh"
+
+read_box box.env # first pass
+source "${bashaform}/${cloud}/_functions.sh"
+
+read_named "${cloud}_location"
+read_named "${cloud}_instance"
+read_box box.env # second pass - allow box.env to override defaults
+
+read_cloud_config_file

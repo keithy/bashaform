@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
-QUIET=true source "${BASH_SOURCE[0]%/*}/box"
+set -euo pipefail
 
-name_ip=$($here/action ip $@)
+bashaform="${BASH_SOURCE[0]%/*}"
+cmd="${BASH_SOURCE[0]##*/}"
+source "${bashaform}/shared/functions.sh"
+
+QUIET=true read_box box.env # first pass
+
+name_ip=$($bashaform/$cloud/action ip $@)
 name="${name_ip% *}"
 ip="${name_ip#* }"
 

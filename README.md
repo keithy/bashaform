@@ -9,15 +9,16 @@ to be easily adopted into and combined with other projects.
 
 ## Installation
 
-Assuming that we are included as a submodule in another project.
+Bashaform is designed to be included as a submodule in another project.
 
 ```
 $> git clone https://github.com/keithy/bashaform.git ~/angelbox/bashaform
 ```
 
-Prepend to `~/.ssh/config`
+Prepend the following to `~/.ssh/config`
 
 ```
+# <top-level-project>/<servers-project>/<servers-category>/<server-folder>/<filename>.ssh_config
 Include ~/angelbox/*/*/*/*.ssh_config
 ```
 
@@ -29,20 +30,21 @@ Include ~/angelbox/*/*/*/*.ssh_config
 
 $> cd ~/angelbox/bashaform/examples.demo/honey1.demo
 
-# long-form: no installation required
+# the long-form-invocation requires no installation
 
 $> ~/angelbox/bashaform/oci/action
 Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|
          SUSPEND|TERMINATE|EXTERMINATE|STATUS|IP
 
 $> ~/angelbox/bashaform/oci/action status
+
 honey1 RUNNING
 
 # short-form (install as an alias)
 $> alias bf=~/angelbox/bashaform/bashaform
 
 # short form (install as an executable)
-$> cd ~/bin ; ln -s ~/angelbox/bashaform/bashaform ~/bin/bf ; cd -
+$> ln -sT ~/angelbox/bashaform/bashaform ~/.local/bin/tf
 
 # Some scripts operate upon the whole tenancy (of the current server)
 $> bf oci/status
