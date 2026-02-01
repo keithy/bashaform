@@ -4,10 +4,13 @@
 # $> alias bf=~/angelbox/bashaform/bashaform
 
 # install as a command
-# $> cd ~/bin ; ln -s ~/angelbox/bashaform/bashaform ~/bin/bf ; cd -
+# $> ln -sT ~/angelbox/bashaform/bashaform ~/.local/bin/bf
 
 # usage
 # $> bf oci/status
 
 bashaform=$(dirname $(readlink -f "$BASH_SOURCE"))
+
+[[ ! -f box.env ]] && echo "No box.env file found, change to a directory with a server configuration" && exit 1
+
 $bashaform/$@

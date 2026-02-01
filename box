@@ -11,6 +11,6 @@ source "${bashaform}/${cloud}/_functions.sh"
 
 read_named "${cloud}_location"
 read_named "${cloud}_instance"
-read_box box.env # second pass - allow box.env to override defaults
+QUIET=true read_box box.env # second pass - allow box.env to override defaults
 
 read_cloud_config_file

@@ -12,13 +12,14 @@ to be easily adopted into and combined with other projects.
 Bashaform is designed to be included as a submodule in another project.
 
 ```
-$> git clone https://github.com/keithy/bashaform.git ~/angelbox/bashaform
+$> git clone https://gitlab.com/angelbox/bashaform.git
 ```
 
 Prepend the following to `~/.ssh/config`
 
+`# <top-level-project>/<servers-project>/<servers-category>/<server-folder>/<filename>.ssh_config`
+
 ```
-# <top-level-project>/<servers-project>/<servers-category>/<server-folder>/<filename>.ssh_config
 Include ~/angelbox/*/*/*/*.ssh_config
 ```
 
@@ -32,11 +33,11 @@ $> cd ~/angelbox/bashaform/examples.demo/honey1.demo
 
 # the long-form-invocation requires no installation
 
-$> ~/angelbox/bashaform/oci/action
+$> ~/angelbox/bashaform/action
 Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|
          SUSPEND|TERMINATE|EXTERMINATE|STATUS|IP
 
-$> ~/angelbox/bashaform/oci/action status
+$> ~/angelbox/bashaform/action status
 
 honey1 RUNNING
 
@@ -44,10 +45,10 @@ honey1 RUNNING
 $> alias bf=~/angelbox/bashaform/bashaform
 
 # short form (install as an executable)
-$> ln -sT ~/angelbox/bashaform/bashaform ~/.local/bin/tf
+$> ln -sT ~/angelbox/bashaform/bashaform ~/.local/bin/bf
 
 # Some scripts operate upon the whole tenancy (of the current server)
-$> bf oci/status
+$> bf status
 +------------+---------+
 | Name       | State   |
 +------------+---------+
@@ -68,7 +69,7 @@ The `box` script prints out the parameters defining the box:
 
 ```console
 >$ cd ~/angelbox/bashaform/examples.demo/honey1.demo`
->$ bf oci/box
+>$ bf box
 
 [~/angelbox/bashaform/examples.demo/honey1.demo/box.env]
 
@@ -76,20 +77,21 @@ The `box` script prints out the parameters defining the box:
 
 box='honey1.demo'
 desc='Honey Pot Server'
+cloud='oci'
 
 # Venue
 
-# oci_config_file='~/.oci/config' # default
-# oci_config='DEFAULT'
-location='location/london-1.env'
-instance='oci_free/amd-micro_rocky.env'
+oci_location='oci_location/london-1.env'
+oci_instance='oci_free/amd-micro_rocky8.env'
 
-[location/london-1.env]
+# overlay='${bashaform}/oci/overlay/Ubuntu/22.04/E2.1.Micro.ext4+NixOS/ROOT'
+
+[oci_location/london-1.env]
 
 zone='HllT:UK-LONDON-1-AD-1'
 subnet='subnet-default'
 
-[oci_free/amd-micro_rocky.env]
+oci_free/amd-micro_rocky8.env]
 
 shape='VM.Standard.E2.1.Micro'
 spec='Intel.c2.1G.50Gb'
@@ -99,6 +101,7 @@ docs='https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshape
 # obtained from ~/angelbox/bashaform/oci/images
 
 image='Rocky-8-OCP-8.7-20230405.0.x86_64.uefi'
+user_data='rocky/enable_root.bash'
 
 # not listed so... directly provide the ocid of the image we want
 image_id='ocid1.image.oc1..aaaaaaaa6ccbrxnbumu3pgej4fkz4hocepobygopdkwfyp5jxeww7ykrf2aq'
@@ -109,8 +112,8 @@ TENANCY=ocid1.tenancy.oc1..aaaaaaaaen5ebfkcxicvfofnjvjd5qc4ib3vrnirtqiddsoip7ztn
 ...
 ```
 
-The `box.env` file is specific but minimal; the venue fields, `location` and `instance`
-reference files linked in from a library of potential venues. However values in `box.env` do override defaults provided there.
+The `box.env` file is specific but minimal; the venue fields, `???_location` and `???_instance`
+reference files linked in from a library of potential venues and values in `box.env` may override defaults provided there.
 
 A box's folder may have several venues linked (though symlinks) available as options to select from.
 
