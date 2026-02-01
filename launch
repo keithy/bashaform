@@ -9,4 +9,6 @@ source "$bashaform/shared/functions.sh"
 
 QUIET=true read_box box.env # first pass
 
+[[ -z "${cloud:-}" ]] && loud red echo "cloud is not set in box.env" && exit 1
+
 source "$bashaform/$cloud/$cmd" $@

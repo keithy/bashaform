@@ -8,6 +8,8 @@ source "${bashaform}/shared/functions.sh"
 
 QUIET=true read_box box.env # first pass
 
+[[ -z "${cloud:-}" ]] && loud red echo "cloud is not set in box.env" && exit 1
+
 name_ip=$($bashaform/$cloud/action ip $@)
 name="${name_ip% *}"
 ip="${name_ip#* }"
