@@ -6,8 +6,8 @@ set -euo pipefail
 here="${BASH_SOURCE[0]%/*}"
 source "$here/../shared/functions.sh"
 
-for box_env in $(find .. -name box.env)
+for box_env in $(find ../.. -name box.env)
 do
     read_env "$box_env" 
-    version=$(ssh "$box"+version 2> /dev/null) && echo $box $version || echo "$box" UNAVAILABLE 
+    version=$(ssh "$box"+status 2> /dev/null) && echo $box $version || echo "$box" UNAVAILABLE 
 done

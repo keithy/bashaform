@@ -82,10 +82,21 @@ read_box ()
 
 read_named ()
 {
-  instance="${!1}" # by name
-  loud green printf "\n[%s]\n\n" "${instance}"
-  loud cyan cat "${instance}"
+  local file="${!1:-}" # by name
 
-  # import shape,image etc.
-  read_env "${instance}"
+  [[ -z "$file" ]] && return
+
+  file="${file/\~/$HOME}"
+  file="${file/\$HOME/$HOME}"
+
+  if [[ -f "$file" ]]
+  then
+    loud green printf "\n[%s]\n\n" "${file}"
+    loud cyan cat "${file}"
+
+    # import shape,image etc.
+    read_env "${file}"
+  else 
+    loud red echo "Not found $file"
+  fi
 }

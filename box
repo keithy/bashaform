@@ -13,4 +13,8 @@ read_named "${cloud}_location"
 read_named "${cloud}_instance"
 QUIET=true read_box box.env # second pass - allow box.env to override defaults
 
-read_cloud_config_file
+if declare -f read_cloud_config_file > /dev/null
+then
+    read_cloud_config_file
+fi
+

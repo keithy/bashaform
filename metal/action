@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+QUIET=true source "${BASH_SOURCE[0]%/*}/box"
+ 
+# Parse input parameters
+action="${1:-XYZ}"
+action="${action^^}" # toUppercase
+
+instance_name=${2:-$PWD}
+instance_name=${instance_name##*/}
+instance_name=${instance_name%.*}
+
+# Get the OCID of the instance with the specified display name
+instance_id=$(oci compute instance list \
+  --compartment-id $TENANCY \
+  --query "data[? \"display-name\" == '$instance_name' && \"lifecycle-state\" != 'TERMINATED' ].id | [0]" \
+  --raw-output)
+
+[[ -z "$instance_id" ]] && red echo "Instance ${instance_name} not found" && exit 1
+
+debug yellow show instance_name instance_id
+
+# Perform action based on user input
+case $action in
+  START|STOP|SOFTSTOP|RESET|SOFTRESET|SUSPEND)
+    # Perform the specified action on the instance
+    oci compute instance action --instance-id $instance_id --action $action
+    ;;
+  STATUS)
+    printf "$instance_name "
+
+    oci compute instance list \
+      --compartment-id $TENANCY \
+      --query "data[? id=='$instance_id'].\"lifecycle-state\" | [0]" \
+      --raw-output
+    ;;
+  EXTERMINATE)
+    echo "selected: EXTERMINATE (also terminates boot volume)"
+    oci compute instance terminate --instance-id "$instance_id" --preserve-boot-volume false
+    ;;
+  TERMINATE)
+    echo "selected: TERMINATE (preserves boot volume)"
+    oci compute instance terminate --instance-id "$instance_id" --preserve-boot-volume true
+    ;;
+  IP | PUBLIC_IP )
+    printf "$instance_name "
+    
+    oci compute instance list-vnics --instance-id "$instance_id" \
+        --query "data[0].\"public-ip\"" --raw-output
+    ;;
+  PRIVATE_IP)
+    printf "$instance_name "
+    
+    oci compute instance list-vnics --instance-id "$instance_id" \
+        --query "data[0].\"private-ip\"" --raw-output
+    ;;
+  ID)
+    printf "$instance_name $instance_id\n"
+    ;;
+  NAME)
+    echo "$instance_name"
+    ;;
+  INFO)
+    oci compute instance list \
+        --compartment-id $TENANCY \
+        --query "data[? \"display-name\" == '$instance_name']"
+    ;;
+  *)
+    red echo "Actions: ID|NAME|INFO|START|STOP|SOFTSTOP|RESET|SOFTRESET|SUSPEND|TERMINATE|EXTERMINATE|STATUS|IP"
+    ;;
+esac
