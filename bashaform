@@ -7,10 +7,11 @@
 # $> ln -sT ~/angelbox/bashaform/bashaform ~/.local/bin/bf
 
 # usage
-# $> bf oci/status
+# $> bf status
 
 bashaform=$(dirname $(readlink -f "$BASH_SOURCE"))
 
 [[ ! -f box.env ]] && echo "No box.env file found, change to a directory with a server configuration" && exit 1
+[[ -z "$@"      ]] && echo "No action specified: box|action|status|launch|update_ip"                  && exit 1
 
 $bashaform/$@

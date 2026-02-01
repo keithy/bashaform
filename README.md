@@ -121,7 +121,7 @@ A box's folder may have several venues linked (though symlinks) available as opt
 $> ls -l
 box.env
 honey.ssh_config
-location/london-1.env -> ../../../oci/location/london-1.env
+oci_location/london-1.env -> ../../../oci/location/london-1.env
 oci_free/amd-micro_rocky.env -> ../../../oci/instance/free/amd-micro_rocky.env
 oci_free/amd-micro_ubuntu.env -> ../../../oci/instance/free/amd-micro_ubuntu.env
 oci_free/ampere-flex_rocky.2c.12G.50Gb.env -> ../../../oci/instance/free/ampere-flex_rocky.2c.12G.50Gb.env
